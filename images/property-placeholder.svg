@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">South London period house placeholder</title>
+  <desc id="desc">A restrained architectural illustration ready to be replaced by a property photograph.</desc>
+  <rect width="1200" height="900" fill="#b99a80"/>
+  <rect y="690" width="1200" height="210" fill="#6d765f"/>
+  <path d="M170 370L600 110l430 260v370H170z" fill="#e7dece"/>
+  <path d="M130 385L600 80l470 305-34 48L600 153 164 433z" fill="#4c514b"/>
+  <path d="M520 470h160v270H520z" fill="#5b493e"/>
+  <path d="M250 445h180v170H250zm520 0h180v170H770z" fill="#627178"/>
+  <path d="M272 468h136v125H272zm520 0h136v125H792z" fill="#bdc6c0"/>
+  <path d="M340 468v125M272 530h136M860 468v125M792 530h136" stroke="#5b6564" stroke-width="8"/>
+  <path d="M145 740h910" stroke="#3f453d" stroke-width="18"/>
+  <circle cx="155" cy="620" r="95" fill="#4e6249"/>
+  <circle cx="1045" cy="610" r="110" fill="#52694d"/>
+  <text x="600" y="835" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" letter-spacing="6" fill="#e8e2d7">PROPERTY PHOTOGRAPH PLACEHOLDER</text>
+</svg>
