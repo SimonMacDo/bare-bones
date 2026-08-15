@@ -1,6 +1,16 @@
 <!doctype html>
 <html lang="en-GB">
 <head>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied'
+    });
+  </script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Bare Bones finds overlooked South London houses, promising streets and renovation opportunities.">
@@ -11,6 +21,19 @@
   <script src="js/app.js" defer></script>
 </head>
 <body>
+  <aside class="consent-banner" data-consent-banner hidden role="dialog" aria-labelledby="consent-title" aria-describedby="consent-description">
+    <div class="container consent-inner">
+      <div>
+        <p class="eyebrow">Optional analytics</p>
+        <h2 id="consent-title">Help us improve Bare Bones</h2>
+        <p id="consent-description">We use optional Google Analytics cookies to measure visits, page views, scrolling and outbound-link clicks. Nothing is sent to Google unless you accept.</p>
+      </div>
+      <div class="consent-actions">
+        <button type="button" class="button button-light" data-analytics-reject>Reject analytics</button>
+        <button type="button" class="button button-dark" data-analytics-accept>Accept analytics</button>
+      </div>
+    </div>
+  </aside>
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="site-header">
@@ -205,7 +228,7 @@
   <footer id="about" class="site-footer">
     <div class="container footer-grid">
       <div><a class="wordmark footer-wordmark" href="#">Bare Bones<span>.</span></a><p>Editorial property intelligence for South London</p></div>
-      <nav aria-label="Footer navigation"><a href="#about">About</a><a href="#method">Methodology</a><a href="#">Advertise</a><a href="#">Contact</a><a href="#">Privacy</a></nav>
+      <nav aria-label="Footer navigation"><a href="#about">About</a><a href="#method">Methodology</a><a href="#">Advertise</a><a href="#">Contact</a><button type="button" class="footer-link" data-cookie-settings aria-expanded="false">Cookie settings</button><a href="#">Privacy</a></nav>
       <p class="legal">Prototype content is fictional and for demonstration only.<br>© 2026 Bare Bones</p>
     </div>
   </footer>
