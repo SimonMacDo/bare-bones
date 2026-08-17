@@ -699,12 +699,31 @@ document.getElementById('replayBtn').addEventListener('click', () => {
   window.scrollTo({ top: gameCard.offsetTop - 20, behavior: 'smooth' });
 });
 
+// Google Apps Script web app URL — writes each submission as a new row
+// in the connected Google Sheet (Timestamp, Email).
+const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwWUByN63Vu2iT-6WnkerxcjA-RQVA2aNQF-HWhW6tvFnY0rpZ2CdpvnJD7Z2rEXvd-Ug/exec';
+
 document.getElementById('emailForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  // TODO: wire this up to a real email provider (Formspree / Buttondown / Mailchimp).
-  // For now this just confirms locally so the flow can be tested end to end.
-  document.getElementById('emailForm').hidden = true;
-  document.getElementById('formMsg').hidden = false;
+  const email = document.getElementById('emailInput').value;
+  const submitBtn = e.target.querySelector('button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending…';
+
+  // mode: 'no-cors' is required for Apps Script web apps — this means the
+  // browser can't read the response, so we can't confirm success/failure
+  // here. The request itself still goes through. Check the Sheet directly
+  // to confirm rows are arriving.
+  fetch(SHEET_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: new URLSearchParams({ email })
+  })
+  .catch(() => { /* opaque response in no-cors mode — nothing to catch in practice */ })
+  .finally(() => {
+    document.getElementById('emailForm').hidden = true;
+    document.getElementById('formMsg').hidden = false;
+  });
 });
 
 loadRound(0);
