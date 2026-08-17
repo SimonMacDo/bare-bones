@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="js/analytics.js" defer></script>
 
 <style>
   :root{
@@ -402,6 +403,63 @@
     margin:0 0 6px;
   }
 
+  .consent-banner{
+    position:fixed;
+    right:0;
+    bottom:0;
+    left:0;
+    z-index:1000;
+    padding:18px 0;
+    border-top:1px solid var(--cream-line);
+    background:var(--cream);
+    box-shadow:0 -10px 30px rgba(43,42,34,0.12);
+  }
+  .consent-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    max-width:760px;
+  }
+  .consent-copy h2{
+    font-size:1.15rem;
+    margin-bottom:4px;
+  }
+  .consent-copy p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:0.8rem;
+  }
+  .consent-actions{
+    display:flex;
+    flex:0 0 auto;
+    gap:8px;
+  }
+  .consent-button{
+    padding:10px 14px;
+    background:var(--green-deep);
+    color:var(--cream);
+  }
+  .consent-button-secondary{
+    border:1px solid var(--cream-line);
+    background:transparent;
+    color:var(--green-deep);
+  }
+  .analytics-settings{
+    padding:0;
+    background:none;
+    color:var(--ink-soft);
+    font-size:0.78rem;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+
+  @media (max-width:559px){
+    .consent-inner{ align-items:stretch; flex-direction:column; }
+    .consent-actions{ width:100%; }
+    .consent-button{ flex:1; }
+  }
+
   [hidden]{ display:none !important; }
 
   :focus-visible{
@@ -415,6 +473,19 @@
 </style>
 </head>
 <body>
+
+<aside class="consent-banner" data-consent-banner hidden role="dialog" aria-labelledby="consent-title" aria-describedby="consent-description">
+  <div class="wrap consent-inner">
+    <div class="consent-copy">
+      <h2 id="consent-title">Optional analytics</h2>
+      <p id="consent-description">Allow Google Analytics to help us understand how the price challenge is used.</p>
+    </div>
+    <div class="consent-actions">
+      <button type="button" class="consent-button consent-button-secondary" data-analytics-reject>Reject</button>
+      <button type="button" class="consent-button" data-analytics-accept>Accept</button>
+    </div>
+  </div>
+</aside>
 
 <header>
   <div class="wrap">
@@ -517,6 +588,7 @@
   <div class="wrap">
     <p>Bare Bones is an independent editorial project. It is not a valuation, surveying, financial or investment advice service. Sale prices are drawn from public sold-price records; verify current details before making any decision.</p>
     <p>© Bare Bones · barebones.london</p>
+    <button type="button" class="analytics-settings" data-cookie-settings aria-expanded="false">Analytics settings</button>
   </div>
 </footer>
 
@@ -646,6 +718,13 @@ submitGuess.addEventListener('click', () => {
 
   const diff = guess - actual;
   const pctOff = Math.abs(diff / actual * 100);
+  window.bareBonesAnalytics?.track('price_guess_submit', {
+    round_number: current + 1,
+    property_title: ROUNDS[current].title,
+    guessed_price: guess,
+    actual_price: actual,
+    percentage_error: Number(pctOff.toFixed(1))
+  });
   const deltaText = document.getElementById('deltaText');
   if (pctOff < 2) {
     deltaText.textContent = `Spot on — within ${pctOff.toFixed(1)}%`;
@@ -675,6 +754,10 @@ nextRound.addEventListener('click', () => {
 function showResults(){
   gameCard.hidden = true;
   const avgPct = guesses.reduce((sum,g) => sum + Math.abs((g.guess - g.actual)/g.actual*100), 0) / guesses.length;
+  window.bareBonesAnalytics?.track('price_challenge_complete', {
+    rounds_completed: guesses.length,
+    average_percentage_error: Number(avgPct.toFixed(1))
+  });
   document.getElementById('endScore').textContent = avgPct.toFixed(1) + '% off';
   document.getElementById('endSub').textContent = 'average distance from the real Crystal Palace sale prices, across ' + ROUNDS.length + ' properties';
   endCard.hidden = false;
