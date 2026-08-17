@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crystal Palace House Price Challenge | SE19 &amp; SE20 Property Quiz — Bare Bones</title>
+<meta name="description" content="How well do you know SE19 and SE20 property? Guess what five real Crystal Palace houses actually sold for. Bare Bones is South East London property intelligence, starting hyperlocal, starting with real numbers.">
+
+<!-- Open Graph — controls how this looks when shared in Facebook/WhatsApp/Nextdoor groups -->
+<meta property="og:title" content="How well do you know Crystal Palace property?">
+<meta property="og:description" content="Guess what 5 real SE19 houses actually sold for. Local knowledge only — no cheating.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://barebones.london">
+<!-- TODO: add og:image (1200x630px) once you have a branded share graphic — link previews without one get ignored in feeds -->
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --cream:#F4EFE3;
+    --cream-card:#ECE3D1;
+    --cream-line: rgba(43,42,34,0.14);
+    --green:#333F2C;
+    --green-deep:#232B1D;
+    --terracotta:#C6795A;
+    --terracotta-deep:#A85F42;
+    --ink:#2B2A22;
+    --ink-soft: rgba(43,42,34,0.66);
+    --radius: 4px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3, .display{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    color:var(--green-deep);
+    margin:0;
+  }
+
+  .eyebrow{
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--terracotta-deep);
+    margin:0 0 14px;
+  }
+
+  a{ color:inherit; }
+
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    padding:28px 0 8px;
+  }
+  header .wrap{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    max-width:760px;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:1.25rem;
+    font-weight:600;
+    color:var(--green-deep);
+  }
+  .logo::after{ content:'.'; color:var(--terracotta); }
+  .header-tag{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    display:none;
+  }
+  @media (min-width:560px){ .header-tag{ display:block; } }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:56px 0 44px;
+    max-width:760px;
+    margin:0 auto;
+  }
+  .hero h1{
+    font-size:clamp(2rem, 5vw, 2.9rem);
+    line-height:1.08;
+    max-width:12ch;
+  }
+  .hero p{
+    margin:22px 0 0;
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    max-width:52ch;
+  }
+  .hero-cta{
+    margin-top:30px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-weight:600;
+    font-size:0.95rem;
+    color:var(--green-deep);
+    text-decoration:none;
+    border-bottom:1.5px solid var(--terracotta);
+    padding-bottom:3px;
+  }
+
+  /* ---------- Game card ---------- */
+  .game-section{
+    padding:8px 0 64px;
+  }
+  .card{
+    background:var(--cream-card);
+    border:1px solid var(--cream-line);
+    border-radius:var(--radius);
+    padding:34px 28px;
+  }
+  @media (min-width:560px){ .card{ padding:44px 40px; } }
+
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .progress-track{
+    height:3px;
+    background:var(--cream-line);
+    border-radius:2px;
+    margin:14px 0 26px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--terracotta);
+    border-radius:2px;
+    transition:width .4s ease;
+  }
+
+  .house-glyph{ display:block; margin:0 auto 22px; }
+
+  .round-title{
+    font-size:1.35rem;
+    text-align:center;
+  }
+  .facts{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px 10px;
+    margin:16px 0 30px;
+  }
+  .fact{
+    font-size:0.78rem;
+    color:var(--green-deep);
+    background:rgba(51,63,44,0.07);
+    border:1px solid var(--cream-line);
+    padding:5px 11px;
+    border-radius:20px;
+    font-weight:500;
+  }
+
+  .guess-label{
+    text-align:center;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .guess-value{
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-size:2.4rem;
+    color:var(--green-deep);
+    margin-bottom:18px;
+  }
+
+  input[type="range"]{
+    width:100%;
+    -webkit-appearance:none;
+    appearance:none;
+    height:6px;
+    border-radius:3px;
+    background:linear-gradient(to right, var(--terracotta) 0%, var(--terracotta) 50%, var(--cream-line) 50%);
+    outline:none;
+    margin:6px 0 8px;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:24px; height:24px;
+    border-radius:50%;
+    background:var(--green-deep);
+    border:3px solid var(--cream-card);
+    box-shadow:0 0 0 1px var(--green-deep);
+    cursor:pointer;
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:24px; height:24px;
+    border-radius:50%;
+    background:var(--green-deep);
+    border:3px solid var(--cream-card);
+    box-shadow:0 0 0 1px var(--green-deep);
+    cursor:pointer;
+  }
+  .range-minmax{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    margin-bottom:26px;
+  }
+
+  button{
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    border-radius:3px;
+    border:none;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .btn-primary{
+    width:100%;
+    background:var(--green-deep);
+    color:var(--cream);
+    padding:15px 20px;
+  }
+  .btn-primary:hover{ background:var(--green); }
+  .btn-primary:active{ transform:scale(0.99); }
+
+  /* ---------- Reveal ---------- */
+  .reveal{
+    margin-top:30px;
+    padding-top:26px;
+    border-top:1px solid var(--cream-line);
+  }
+  .reveal-numbers{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:18px;
+  }
+  .reveal-block{ text-align:center; flex:1; }
+  .reveal-block .k{
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+    font-weight:600;
+  }
+  .reveal-block .v{
+    font-family:'Fraunces', serif;
+    font-size:1.5rem;
+    color:var(--green-deep);
+  }
+
+  .delta-bar{
+    position:relative;
+    height:8px;
+    background:var(--cream-line);
+    border-radius:4px;
+    margin:22px 4px 30px;
+  }
+  .marker{
+    position:absolute;
+    top:50%;
+    width:16px; height:16px;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    transition:left .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .marker.guess{ background:var(--cream); border:2.5px solid var(--terracotta); z-index:2; }
+  .marker.actual{ background:var(--green-deep); z-index:1; }
+  .marker-label{
+    position:absolute;
+    top:-22px;
+    font-size:0.65rem;
+    font-weight:600;
+    white-space:nowrap;
+    transform:translateX(-50%);
+  }
+
+  .delta-text{
+    text-align:center;
+    font-size:1rem;
+    font-weight:600;
+    color:var(--green-deep);
+    margin-bottom:6px;
+  }
+
+  .note{
+    background:rgba(198,121,90,0.1);
+    border-left:3px solid var(--terracotta);
+    padding:14px 16px;
+    font-size:0.92rem;
+    color:var(--ink);
+    margin-top:18px;
+    border-radius:0 3px 3px 0;
+  }
+  .note strong{ color:var(--terracotta-deep); }
+
+  /* ---------- End screen ---------- */
+  .end-card{ text-align:center; }
+  .end-score{
+    font-family:'Fraunces', serif;
+    font-size:3rem;
+    color:var(--green-deep);
+    margin:18px 0 6px;
+  }
+  .end-sub{ color:var(--ink-soft); font-size:0.95rem; margin-bottom:28px; }
+
+  .coming-soon{
+    background:var(--green-deep);
+    color:var(--cream);
+    border-radius:var(--radius);
+    padding:38px 28px;
+    margin-top:18px;
+    text-align:center;
+  }
+  @media (min-width:560px){ .coming-soon{ padding:46px 40px; } }
+  .coming-soon h2{
+    color:var(--cream);
+    font-size:1.5rem;
+    max-width:26ch;
+    margin:0 auto 12px;
+  }
+  .coming-soon p{
+    color:rgba(244,239,227,0.72);
+    font-size:0.95rem;
+    max-width:40ch;
+    margin:0 auto 26px;
+  }
+  .email-form{
+    display:flex;
+    gap:8px;
+    max-width:380px;
+    margin:0 auto;
+    flex-wrap:wrap;
+  }
+  .email-form input[type="email"]{
+    flex:1;
+    min-width:180px;
+    padding:13px 14px;
+    border-radius:3px;
+    border:1px solid rgba(244,239,227,0.3);
+    background:rgba(244,239,227,0.08);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    font-size:0.92rem;
+  }
+  .email-form input::placeholder{ color:rgba(244,239,227,0.5); }
+  .email-form button{
+    background:var(--terracotta);
+    color:var(--green-deep);
+    padding:13px 20px;
+    white-space:nowrap;
+  }
+  .email-form button:hover{ background:var(--terracotta-deep); color:var(--cream); }
+  .form-msg{
+    font-size:0.82rem;
+    margin-top:14px;
+    color:rgba(244,239,227,0.75);
+  }
+
+  .replay-link{
+    display:inline-block;
+    margin-top:22px;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    background:none;
+    padding:0;
+  }
+
+  footer{
+    padding:34px 0 50px;
+    border-top:1px solid var(--cream-line);
+    margin-top:10px;
+  }
+  footer .wrap{ max-width:760px; }
+  footer p{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    max-width:60ch;
+    margin:0 0 6px;
+  }
+
+  [hidden]{ display:none !important; }
+
+  :focus-visible{
+    outline:2px solid var(--terracotta-deep);
+    outline-offset:2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo">Bare Bones</div>
+    <div class="header-tag">Crystal Palace Price Challenge</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Bare Bones — South East London Property Intelligence</p>
+    <h1>How well do you know<br>Crystal Palace property?</h1>
+    <p>Bare Bones is a new way to look at London property — starting hyperlocal, starting with real numbers. Below are five real SE19 &amp; SE20 sales. See how close you can get to what they actually sold for.</p>
+    <a href="#game" class="hero-cta">Play the Price Challenge ↓</a>
+  </div>
+</section>
+
+<section class="game-section" id="game">
+  <div class="wrap">
+
+    <!-- GAME CARD -->
+    <div class="card" id="gameCard">
+      <div class="progress-row">
+        <span class="progress-label" id="progressLabel">Property 1 of 5</span>
+        <span class="progress-label" id="progressPct">20%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+
+      <svg class="house-glyph" width="88" height="72" viewBox="0 0 88 72" aria-hidden="true">
+        <polygon points="44,4 84,34 4,34" fill="#333F2C"/>
+        <rect x="14" y="34" width="60" height="34" fill="#F4EFE3" stroke="#333F2C" stroke-width="2"/>
+        <rect x="38" y="46" width="12" height="22" fill="#C6795A"/>
+        <circle cx="70" cy="58" r="9" fill="#55684A"/>
+      </svg>
+
+      <h2 class="round-title" id="roundTitle">—</h2>
+      <div class="facts" id="roundFacts"></div>
+
+      <div id="guessStage">
+        <p class="guess-label">Your guess</p>
+        <p class="guess-value" id="guessValue">£700,000</p>
+        <input type="range" id="guessSlider" min="250000" max="1600000" step="5000" value="700000" aria-label="Guess the sale price">
+        <div class="range-minmax"><span>£250k</span><span>£1.6m</span></div>
+        <button class="btn-primary" id="submitGuess">Lock in my guess</button>
+      </div>
+
+      <div class="reveal" id="revealStage" hidden aria-live="polite">
+        <div class="reveal-numbers">
+          <div class="reveal-block">
+            <div class="k">Your guess</div>
+            <div class="v" id="revealGuess">—</div>
+          </div>
+          <div class="reveal-block">
+            <div class="k">Actual sale price</div>
+            <div class="v" id="revealActual">—</div>
+          </div>
+        </div>
+
+        <div class="delta-bar" id="deltaBar">
+          <div class="marker-label" id="guessMarkerLabel" style="color:var(--terracotta-deep)">Guess</div>
+          <div class="marker guess" id="guessMarker"></div>
+          <div class="marker-label" id="actualMarkerLabel" style="color:var(--green-deep)">Actual</div>
+          <div class="marker actual" id="actualMarker"></div>
+        </div>
+
+        <p class="delta-text" id="deltaText"></p>
+
+        <div class="note" id="roundNote"></div>
+
+        <button class="btn-primary" id="nextRound" style="margin-top:26px;">Next property</button>
+      </div>
+    </div>
+
+    <!-- END CARD -->
+    <div class="card end-card" id="endCard" hidden>
+      <p class="eyebrow" style="text-align:center;">Results</p>
+      <h2>Your Crystal Palace score</h2>
+      <p class="end-score" id="endScore">—</p>
+      <p class="end-sub" id="endSub">average distance from the real sale prices</p>
+      <button class="replay-link" id="replayBtn">Play again</button>
+    </div>
+
+    <!-- COMING SOON -->
+    <div class="coming-soon" id="comingSoon" hidden>
+      <p class="eyebrow" style="color:var(--terracotta); text-align:center;">Coming soon</p>
+      <h2>Real overlooked properties, picked and explained by us.</h2>
+      <p>Bare Bones is building beyond the game: houses with renovation potential across South London, chosen and analysed by us — not an algorithm. Get the next one first.</p>
+      <form class="email-form" id="emailForm">
+        <!-- TODO: replace action with a real form endpoint (Formspree, Buttondown, Mailchimp, etc.) before launch -->
+        <input type="email" id="emailInput" placeholder="you@email.com" required aria-label="Email address">
+        <button type="submit">Notify me</button>
+      </form>
+      <p class="form-msg" id="formMsg" hidden>Thanks — we'll be in touch when the first property drops.</p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Bare Bones is an independent editorial project. It is not a valuation, surveying, financial or investment advice service. Sale prices are drawn from public sold-price records; verify current details before making any decision.</p>
+    <p>© Bare Bones · barebones.london</p>
+  </div>
+</footer>
+
+<script>
+/* =========================================================================
+   ROUND DATA — PLACEHOLDER / EXAMPLE VALUES
+   These are illustrative and anchored to real Crystal Palace/SE19 house-price
+   ranges (Land Registry via public aggregators, 2025–26: semi-detached median
+   ~£760k, range ~£489.5k–£1.45m) but are NOT verified individual transactions.
+
+   Before sharing this publicly, replace each entry below with a real, exact
+   transaction from HM Land Registry Price Paid Data:
+   https://landregistry.data.gov.uk/app/ppd
+   (or the Rightmove / Zoopla "house prices" lookup for SE19 / SE20, which is
+   sourced from the same Land Registry data).
+   ========================================================================= */
+const ROUNDS = [
+  {
+    title: "Victorian terrace, off Anerley Hill",
+    facts: ["3 bed", "Terraced house", "Freehold", "SE19"],
+    actual: 825000,
+    note: "<strong>Bare Bones read —</strong> Original condition throughout. Terraces on this street have sold for meaningfully more once extended into the side return."
+  },
+  {
+    title: "Semi-detached house, Crystal Palace Park borders",
+    facts: ["4 bed", "Semi-detached", "Freehold", "SE19"],
+    actual: 1050000,
+    note: "<strong>Bare Bones read —</strong> Already extended and well presented — this sits near the top of the range for the postcode."
+  },
+  {
+    title: "Edwardian house, Anerley",
+    facts: ["3 bed", "Terraced house", "Freehold", "SE20"],
+    actual: 715000,
+    note: "<strong>Bare Bones read —</strong> Dated kitchen and bathroom kept this one below the local house median, despite a good layout."
+  },
+  {
+    title: "Cottage-style house, Gipsy Hill borders",
+    facts: ["2 bed", "Terraced house", "Freehold", "SE19"],
+    actual: 650000,
+    note: "<strong>Bare Bones read —</strong> Needs a full rewire and a fresh layout — smaller footprint kept this under £700k despite the location."
+  },
+  {
+    title: "Extended family house, West Dulwich borders",
+    facts: ["5 bed", "Semi-detached", "Freehold", "SE21"],
+    actual: 1450000,
+    note: "<strong>Bare Bones read —</strong> A loft conversion already done. Provable, finished work like this is what tends to justify the top of the local range."
+  }
+];
+
+let current = 0;
+let guesses = [];
+
+const guessSlider = document.getElementById('guessSlider');
+const guessValue = document.getElementById('guessValue');
+const roundTitle = document.getElementById('roundTitle');
+const roundFacts = document.getElementById('roundFacts');
+const progressLabel = document.getElementById('progressLabel');
+const progressPct = document.getElementById('progressPct');
+const progressFill = document.getElementById('progressFill');
+const guessStage = document.getElementById('guessStage');
+const revealStage = document.getElementById('revealStage');
+const submitGuess = document.getElementById('submitGuess');
+const nextRound = document.getElementById('nextRound');
+const gameCard = document.getElementById('gameCard');
+const endCard = document.getElementById('endCard');
+const comingSoon = document.getElementById('comingSoon');
+
+function fmt(n){
+  return '£' + Math.round(n).toLocaleString('en-GB');
+}
+
+function paintSliderTrack(){
+  const min = +guessSlider.min, max = +guessSlider.max, val = +guessSlider.value;
+  const pct = ((val - min) / (max - min)) * 100;
+  guessSlider.style.background =
+    `linear-gradient(to right, var(--terracotta) ${pct}%, var(--cream-line) ${pct}%)`;
+}
+
+guessSlider.addEventListener('input', () => {
+  guessValue.textContent = fmt(guessSlider.value);
+  paintSliderTrack();
+});
+
+function loadRound(i){
+  const r = ROUNDS[i];
+  roundTitle.textContent = r.title;
+  roundFacts.innerHTML = r.facts.map(f => `<span class="fact">${f}</span>`).join('');
+  progressLabel.textContent = `Property ${i+1} of ${ROUNDS.length}`;
+  progressPct.textContent = Math.round(((i)/ROUNDS.length)*100) + '%';
+  progressFill.style.width = ((i)/ROUNDS.length*100) + '%';
+
+  guessSlider.value = 700000;
+  guessValue.textContent = fmt(700000);
+  paintSliderTrack();
+
+  guessStage.hidden = false;
+  revealStage.hidden = true;
+}
+
+submitGuess.addEventListener('click', () => {
+  const guess = +guessSlider.value;
+  const actual = ROUNDS[current].actual;
+  guesses.push({ guess, actual });
+
+  document.getElementById('revealGuess').textContent = fmt(guess);
+  document.getElementById('revealActual').textContent = fmt(actual);
+
+  const min = Math.min(guess, actual) * 0.85;
+  const max = Math.max(guess, actual) * 1.15;
+  const guessPct = ((guess - min) / (max - min)) * 100;
+  const actualPct = ((actual - min) / (max - min)) * 100;
+
+  const guessMarker = document.getElementById('guessMarker');
+  const actualMarker = document.getElementById('actualMarker');
+  const guessLabel = document.getElementById('guessMarkerLabel');
+  const actualLabel = document.getElementById('actualMarkerLabel');
+
+  guessMarker.style.left = '0%';
+  actualMarker.style.left = '0%';
+  guessLabel.style.left = guessPct + '%';
+  actualLabel.style.left = actualPct + '%';
+
+  requestAnimationFrame(() => {
+    guessMarker.style.left = guessPct + '%';
+    actualMarker.style.left = actualPct + '%';
+  });
+
+  const diff = guess - actual;
+  const pctOff = Math.abs(diff / actual * 100);
+  const deltaText = document.getElementById('deltaText');
+  if (pctOff < 2) {
+    deltaText.textContent = `Spot on — within ${pctOff.toFixed(1)}%`;
+  } else {
+    deltaText.textContent = `${fmt(Math.abs(diff))} too ${diff > 0 ? 'high' : 'low'} (${pctOff.toFixed(1)}% off)`;
+  }
+
+  document.getElementById('roundNote').innerHTML = ROUNDS[current].note;
+
+  guessStage.hidden = true;
+  revealStage.hidden = false;
+  nextRound.textContent = (current === ROUNDS.length - 1) ? 'See your results' : 'Next property';
+
+  progressPct.textContent = Math.round(((current+1)/ROUNDS.length)*100) + '%';
+  progressFill.style.width = ((current+1)/ROUNDS.length*100) + '%';
+});
+
+nextRound.addEventListener('click', () => {
+  current++;
+  if (current < ROUNDS.length){
+    loadRound(current);
+  } else {
+    showResults();
+  }
+});
+
+function showResults(){
+  gameCard.hidden = true;
+  const avgPct = guesses.reduce((sum,g) => sum + Math.abs((g.guess - g.actual)/g.actual*100), 0) / guesses.length;
+  document.getElementById('endScore').textContent = avgPct.toFixed(1) + '% off';
+  document.getElementById('endSub').textContent = 'average distance from the real Crystal Palace sale prices, across ' + ROUNDS.length + ' properties';
+  endCard.hidden = false;
+  comingSoon.hidden = false;
+}
+
+document.getElementById('replayBtn').addEventListener('click', () => {
+  current = 0;
+  guesses = [];
+  endCard.hidden = true;
+  comingSoon.hidden = true;
+  gameCard.hidden = false;
+  loadRound(0);
+  window.scrollTo({ top: gameCard.offsetTop - 20, behavior: 'smooth' });
+});
+
+// Google Apps Script web app URL — writes each submission as a new row
+// in the connected Google Sheet (Timestamp, Email).
+const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwWUByN63Vu2iT-6WnkerxcjA-RQVA2aNQF-HWhW6tvFnY0rpZ2CdpvnJD7Z2rEXvd-Ug/exec';
+
+document.getElementById('emailForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('emailInput').value;
+  const submitBtn = e.target.querySelector('button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending…';
+
+  // mode: 'no-cors' is required for Apps Script web apps — this means the
+  // browser can't read the response, so we can't confirm success/failure
+  // here. The request itself still goes through. Check the Sheet directly
+  // to confirm rows are arriving.
+  fetch(SHEET_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: new URLSearchParams({ email })
+  })
+  .catch(() => { /* opaque response in no-cors mode — nothing to catch in practice */ })
+  .finally(() => {
+    document.getElementById('emailForm').hidden = true;
+    document.getElementById('formMsg').hidden = false;
+  });
+});
+
+loadRound(0);
+</script>
+
+</body>
+</html>
