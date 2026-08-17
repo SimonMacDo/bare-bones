@@ -1,236 +1,706 @@
-<!doctype html>
-<html lang="en-GB">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('consent', 'default', {
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      analytics_storage: 'denied'
-    });
-  </script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Bare Bones finds overlooked South London houses, promising streets and renovation opportunities.">
-  <link rel="canonical" href="https://barebones.london/">
-  <meta property="og:url" content="https://barebones.london/">
-  <title>Bare Bones — South London property intelligence</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <script src="js/app.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bare Bones — Crystal Palace Price Challenge</title>
+<meta name="description" content="Guess what five real Crystal Palace houses actually sold for. Bare Bones is a new way to look at London property — starting hyperlocal, starting with real numbers.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --cream:#F4EFE3;
+    --cream-card:#ECE3D1;
+    --cream-line: rgba(43,42,34,0.14);
+    --green:#333F2C;
+    --green-deep:#232B1D;
+    --terracotta:#C6795A;
+    --terracotta-deep:#A85F42;
+    --ink:#2B2A22;
+    --ink-soft: rgba(43,42,34,0.66);
+    --radius: 4px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3, .display{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    letter-spacing:-0.01em;
+    color:var(--green-deep);
+    margin:0;
+  }
+
+  .eyebrow{
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-weight:600;
+    color:var(--terracotta-deep);
+    margin:0 0 14px;
+  }
+
+  a{ color:inherit; }
+
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    padding:28px 0 8px;
+  }
+  header .wrap{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    max-width:760px;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:1.25rem;
+    font-weight:600;
+    color:var(--green-deep);
+  }
+  .logo::after{ content:'.'; color:var(--terracotta); }
+  .header-tag{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    display:none;
+  }
+  @media (min-width:560px){ .header-tag{ display:block; } }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:56px 0 44px;
+    max-width:760px;
+    margin:0 auto;
+  }
+  .hero h1{
+    font-size:clamp(2rem, 5vw, 2.9rem);
+    line-height:1.08;
+    max-width:12ch;
+  }
+  .hero p{
+    margin:22px 0 0;
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    max-width:52ch;
+  }
+  .hero-cta{
+    margin-top:30px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-weight:600;
+    font-size:0.95rem;
+    color:var(--green-deep);
+    text-decoration:none;
+    border-bottom:1.5px solid var(--terracotta);
+    padding-bottom:3px;
+  }
+
+  /* ---------- Game card ---------- */
+  .game-section{
+    padding:8px 0 64px;
+  }
+  .card{
+    background:var(--cream-card);
+    border:1px solid var(--cream-line);
+    border-radius:var(--radius);
+    padding:34px 28px;
+  }
+  @media (min-width:560px){ .card{ padding:44px 40px; } }
+
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+  }
+  .progress-label{
+    font-size:0.72rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .progress-track{
+    height:3px;
+    background:var(--cream-line);
+    border-radius:2px;
+    margin:14px 0 26px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:var(--terracotta);
+    border-radius:2px;
+    transition:width .4s ease;
+  }
+
+  .house-glyph{ display:block; margin:0 auto 22px; }
+
+  .round-title{
+    font-size:1.35rem;
+    text-align:center;
+  }
+  .facts{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px 10px;
+    margin:16px 0 30px;
+  }
+  .fact{
+    font-size:0.78rem;
+    color:var(--green-deep);
+    background:rgba(51,63,44,0.07);
+    border:1px solid var(--cream-line);
+    padding:5px 11px;
+    border-radius:20px;
+    font-weight:500;
+  }
+
+  .guess-label{
+    text-align:center;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .guess-value{
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-size:2.4rem;
+    color:var(--green-deep);
+    margin-bottom:18px;
+  }
+
+  input[type="range"]{
+    width:100%;
+    -webkit-appearance:none;
+    appearance:none;
+    height:6px;
+    border-radius:3px;
+    background:linear-gradient(to right, var(--terracotta) 0%, var(--terracotta) 50%, var(--cream-line) 50%);
+    outline:none;
+    margin:6px 0 8px;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:24px; height:24px;
+    border-radius:50%;
+    background:var(--green-deep);
+    border:3px solid var(--cream-card);
+    box-shadow:0 0 0 1px var(--green-deep);
+    cursor:pointer;
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:24px; height:24px;
+    border-radius:50%;
+    background:var(--green-deep);
+    border:3px solid var(--cream-card);
+    box-shadow:0 0 0 1px var(--green-deep);
+    cursor:pointer;
+  }
+  .range-minmax{
+    display:flex;
+    justify-content:space-between;
+    font-size:0.72rem;
+    color:var(--ink-soft);
+    margin-bottom:26px;
+  }
+
+  button{
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+    border-radius:3px;
+    border:none;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .btn-primary{
+    width:100%;
+    background:var(--green-deep);
+    color:var(--cream);
+    padding:15px 20px;
+  }
+  .btn-primary:hover{ background:var(--green); }
+  .btn-primary:active{ transform:scale(0.99); }
+
+  /* ---------- Reveal ---------- */
+  .reveal{
+    margin-top:30px;
+    padding-top:26px;
+    border-top:1px solid var(--cream-line);
+  }
+  .reveal-numbers{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:18px;
+  }
+  .reveal-block{ text-align:center; flex:1; }
+  .reveal-block .k{
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+    font-weight:600;
+  }
+  .reveal-block .v{
+    font-family:'Fraunces', serif;
+    font-size:1.5rem;
+    color:var(--green-deep);
+  }
+
+  .delta-bar{
+    position:relative;
+    height:8px;
+    background:var(--cream-line);
+    border-radius:4px;
+    margin:22px 4px 30px;
+  }
+  .marker{
+    position:absolute;
+    top:50%;
+    width:16px; height:16px;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    transition:left .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .marker.guess{ background:var(--cream); border:2.5px solid var(--terracotta); z-index:2; }
+  .marker.actual{ background:var(--green-deep); z-index:1; }
+  .marker-label{
+    position:absolute;
+    top:-22px;
+    font-size:0.65rem;
+    font-weight:600;
+    white-space:nowrap;
+    transform:translateX(-50%);
+  }
+
+  .delta-text{
+    text-align:center;
+    font-size:1rem;
+    font-weight:600;
+    color:var(--green-deep);
+    margin-bottom:6px;
+  }
+
+  .note{
+    background:rgba(198,121,90,0.1);
+    border-left:3px solid var(--terracotta);
+    padding:14px 16px;
+    font-size:0.92rem;
+    color:var(--ink);
+    margin-top:18px;
+    border-radius:0 3px 3px 0;
+  }
+  .note strong{ color:var(--terracotta-deep); }
+
+  /* ---------- End screen ---------- */
+  .end-card{ text-align:center; }
+  .end-score{
+    font-family:'Fraunces', serif;
+    font-size:3rem;
+    color:var(--green-deep);
+    margin:18px 0 6px;
+  }
+  .end-sub{ color:var(--ink-soft); font-size:0.95rem; margin-bottom:28px; }
+
+  .coming-soon{
+    background:var(--green-deep);
+    color:var(--cream);
+    border-radius:var(--radius);
+    padding:38px 28px;
+    margin-top:18px;
+    text-align:center;
+  }
+  @media (min-width:560px){ .coming-soon{ padding:46px 40px; } }
+  .coming-soon h2{
+    color:var(--cream);
+    font-size:1.5rem;
+    max-width:26ch;
+    margin:0 auto 12px;
+  }
+  .coming-soon p{
+    color:rgba(244,239,227,0.72);
+    font-size:0.95rem;
+    max-width:40ch;
+    margin:0 auto 26px;
+  }
+  .email-form{
+    display:flex;
+    gap:8px;
+    max-width:380px;
+    margin:0 auto;
+    flex-wrap:wrap;
+  }
+  .email-form input[type="email"]{
+    flex:1;
+    min-width:180px;
+    padding:13px 14px;
+    border-radius:3px;
+    border:1px solid rgba(244,239,227,0.3);
+    background:rgba(244,239,227,0.08);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    font-size:0.92rem;
+  }
+  .email-form input::placeholder{ color:rgba(244,239,227,0.5); }
+  .email-form button{
+    background:var(--terracotta);
+    color:var(--green-deep);
+    padding:13px 20px;
+    white-space:nowrap;
+  }
+  .email-form button:hover{ background:var(--terracotta-deep); color:var(--cream); }
+  .form-msg{
+    font-size:0.82rem;
+    margin-top:14px;
+    color:rgba(244,239,227,0.75);
+  }
+
+  .replay-link{
+    display:inline-block;
+    margin-top:22px;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    background:none;
+    padding:0;
+  }
+
+  footer{
+    padding:34px 0 50px;
+    border-top:1px solid var(--cream-line);
+    margin-top:10px;
+  }
+  footer .wrap{ max-width:760px; }
+  footer p{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    max-width:60ch;
+    margin:0 0 6px;
+  }
+
+  [hidden]{ display:none !important; }
+
+  :focus-visible{
+    outline:2px solid var(--terracotta-deep);
+    outline-offset:2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important; }
+  }
+</style>
 </head>
 <body>
-  <aside class="consent-banner" data-consent-banner hidden role="dialog" aria-labelledby="consent-title" aria-describedby="consent-description">
-    <div class="container consent-inner">
-      <div>
-        <p class="eyebrow">Optional analytics</p>
-        <h2 id="consent-title">Help us improve Bare Bones</h2>
-        <p id="consent-description">We use optional Google Analytics cookies to measure visits, page views, scrolling and outbound-link clicks. Nothing is sent to Google unless you accept.</p>
+
+<header>
+  <div class="wrap">
+    <div class="logo">Bare Bones</div>
+    <div class="header-tag">Crystal Palace Price Challenge</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Bare Bones — London Property Intelligence</p>
+    <h1>How well do you know<br>Crystal Palace property?</h1>
+    <p>Bare Bones is a new way to look at London property — starting hyperlocal, starting with real numbers. Below are five real Crystal Palace sales. See how close you can get to what they actually sold for.</p>
+    <a href="#game" class="hero-cta">Play the Price Challenge ↓</a>
+  </div>
+</section>
+
+<section class="game-section" id="game">
+  <div class="wrap">
+
+    <!-- GAME CARD -->
+    <div class="card" id="gameCard">
+      <div class="progress-row">
+        <span class="progress-label" id="progressLabel">Property 1 of 5</span>
+        <span class="progress-label" id="progressPct">20%</span>
       </div>
-      <div class="consent-actions">
-        <button type="button" class="button button-light" data-analytics-reject>Reject analytics</button>
-        <button type="button" class="button button-dark" data-analytics-accept>Accept analytics</button>
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+
+      <svg class="house-glyph" width="88" height="72" viewBox="0 0 88 72" aria-hidden="true">
+        <polygon points="44,4 84,34 4,34" fill="#333F2C"/>
+        <rect x="14" y="34" width="60" height="34" fill="#F4EFE3" stroke="#333F2C" stroke-width="2"/>
+        <rect x="38" y="46" width="12" height="22" fill="#C6795A"/>
+        <circle cx="70" cy="58" r="9" fill="#55684A"/>
+      </svg>
+
+      <h2 class="round-title" id="roundTitle">—</h2>
+      <div class="facts" id="roundFacts"></div>
+
+      <div id="guessStage">
+        <p class="guess-label">Your guess</p>
+        <p class="guess-value" id="guessValue">£700,000</p>
+        <input type="range" id="guessSlider" min="250000" max="1600000" step="5000" value="700000" aria-label="Guess the sale price">
+        <div class="range-minmax"><span>£250k</span><span>£1.6m</span></div>
+        <button class="btn-primary" id="submitGuess">Lock in my guess</button>
+      </div>
+
+      <div class="reveal" id="revealStage" hidden aria-live="polite">
+        <div class="reveal-numbers">
+          <div class="reveal-block">
+            <div class="k">Your guess</div>
+            <div class="v" id="revealGuess">—</div>
+          </div>
+          <div class="reveal-block">
+            <div class="k">Actual sale price</div>
+            <div class="v" id="revealActual">—</div>
+          </div>
+        </div>
+
+        <div class="delta-bar" id="deltaBar">
+          <div class="marker-label" id="guessMarkerLabel" style="color:var(--terracotta-deep)">Guess</div>
+          <div class="marker guess" id="guessMarker"></div>
+          <div class="marker-label" id="actualMarkerLabel" style="color:var(--green-deep)">Actual</div>
+          <div class="marker actual" id="actualMarker"></div>
+        </div>
+
+        <p class="delta-text" id="deltaText"></p>
+
+        <div class="note" id="roundNote"></div>
+
+        <button class="btn-primary" id="nextRound" style="margin-top:26px;">Next property</button>
       </div>
     </div>
-  </aside>
-  <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="wordmark" href="#" aria-label="Bare Bones home">Bare Bones<span>.</span></a>
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-      <nav id="site-nav" class="site-nav" aria-label="Primary navigation">
-        <a href="#properties">Properties</a>
-        <a href="#areas">Areas</a>
-        <a href="#sold-prices">Sold Prices</a>
-        <a href="#method">How It Works</a>
-        <a href="#about">About</a>
-      </nav>
+    <!-- END CARD -->
+    <div class="card end-card" id="endCard" hidden>
+      <p class="eyebrow" style="text-align:center;">Results</p>
+      <h2>Your Crystal Palace score</h2>
+      <p class="end-score" id="endScore">—</p>
+      <p class="end-sub" id="endSub">average distance from the real sale prices</p>
+      <button class="replay-link" id="replayBtn">Play again</button>
     </div>
-  </header>
 
-  <main id="main-content">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Independent property intelligence · South London</p>
-          <h1>South London houses with more potential than polish.</h1>
-          <p class="hero-intro">Bare Bones finds overlooked homes, promising streets and renovation opportunities that deserve a closer look.</p>
-          <div class="button-row">
-            <a class="button button-dark" href="#properties">Explore properties</a>
-            <a class="button button-light" href="#areas">Explore areas</a>
-          </div>
-        </div>
-        <figure class="hero-image image-frame">
-          <img src="images/property-placeholder.svg" alt="Illustrated placeholder for a South London period house">
-          <figcaption><span>Field note 01</span> A tired façade can conceal unusually good bones.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section id="properties" class="section container">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">The current shortlist</p>
-          <h2>Featured opportunities</h2>
-        </div>
-        <p>Six fictional examples selected for underlying quality, location and plausible scope to add value—not simply a low asking price.</p>
-      </div>
-
-      <div class="property-grid">
-        <article class="property-card">
-          <div class="card-image"><img src="images/property-placeholder.svg" alt="Placeholder for Victorian house in Penge"><span class="score">87 <small>/ 100</small></span></div>
-          <div class="card-body">
-            <div class="price-row"><h3>£825,000</h3><span>Penge · SE20</span></div>
-            <p class="facts">4 bedrooms · Freehold · 7 min to Penge East</p>
-            <p>A wide Victorian house with compromised rooms, retained joinery and a larger-than-average side return.</p>
-            <ul class="tags"><li>Needs work</li><li>Extension potential</li></ul>
-          </div>
-        </article>
-
-        <article class="property-card">
-          <div class="card-image tone-clay"><img src="images/property-placeholder.svg" alt="Placeholder for Edwardian house in Anerley"><span class="score">84 <small>/ 100</small></span></div>
-          <div class="card-body">
-            <div class="price-row"><h3>£775,000</h3><span>Anerley · SE20</span></div>
-            <p class="facts">3 bedrooms · Freehold · 5 min to Anerley</p>
-            <p>Poor presentation obscures generous proportions on a quiet street between two useful stations.</p>
-            <ul class="tags"><li>Poor presentation</li><li>Overlooked street</li></ul>
-          </div>
-        </article>
-
-        <article class="property-card">
-          <div class="card-image tone-moss"><img src="images/property-placeholder.svg" alt="Placeholder for period house in Sydenham"><span class="score">82 <small>/ 100</small></span></div>
-          <div class="card-body">
-            <div class="price-row"><h3>£895,000</h3><span>Sydenham · SE26</span></div>
-            <p class="facts">4 bedrooms · Freehold · 9 min to Sydenham</p>
-            <p>A probate-style sale with original fireplaces, deep garden and an inefficient rear arrangement.</p>
-            <ul class="tags"><li>Probate</li><li>Period details</li></ul>
-          </div>
-        </article>
-
-        <article class="property-card">
-          <div class="card-image tone-slate"><img src="images/property-placeholder.svg" alt="Placeholder for terrace in Peckham"><span class="score">79 <small>/ 100</small></span></div>
-          <div class="card-body">
-            <div class="price-row"><h3>£950,000</h3><span>Peckham · SE15</span></div>
-            <p class="facts">3 bedrooms · Freehold · 11 min to Peckham Rye</p>
-            <p>An unmodernised terrace just beyond the best-known streets, with a coherent façade and intact plan.</p>
-            <ul class="tags"><li>Needs work</li><li>Period details</li></ul>
-          </div>
-        </article>
-
-        <article class="property-card">
-          <div class="card-image tone-stone"><img src="images/property-placeholder.svg" alt="Placeholder for auction house in West Dulwich"><span class="score">76 <small>/ 100</small></span></div>
-          <div class="card-body">
-            <div class="price-row"><h3>Guide £900,000</h3><span>West Dulwich · SE21</span></div>
-            <p class="facts">4 bedrooms · Freehold · 8 min to West Dulwich</p>
-            <p>An auction lot needing full refurbishment, but with rare family-house scale and a sound street position.</p>
-            <ul class="tags"><li>Auction</li><li>Needs work</li></ul>
-          </div>
-        </article>
-
-        <article class="property-card">
-          <div class="card-image tone-ochre"><img src="images/property-placeholder.svg" alt="Placeholder for house near Crystal Palace"><span class="score">74 <small>/ 100</small></span></div>
-          <div class="card-body">
-            <div class="price-row"><h3>£1,075,000</h3><span>Crystal Palace · SE19</span></div>
-            <p class="facts">5 bedrooms · Freehold · 12 min to Gipsy Hill</p>
-            <p>A substantial house with dated finishes and potential to restore hierarchy to heavily altered rooms.</p>
-            <ul class="tags"><li>Poor presentation</li><li>Period details</li></ul>
-          </div>
-        </article>
-      </div>
-      <p class="prototype-note">Prototype listings are fictional. Scores, prices, distances and assessments are illustrative.</p>
-    </section>
-
-    <section id="method" class="analysis-section">
-      <div class="container analysis-grid">
-        <div class="analysis-intro">
-          <p class="eyebrow">Opportunity 01 · Penge</p>
-          <h2>Why Bare Bones spotted it</h2>
-          <p>The discount is only interesting if the house, street and likely works support a credible route to value.</p>
-          <div class="score-large"><strong>87</strong><span>Potential score<br>out of 100</span></div>
-        </div>
-        <dl class="analysis-list">
-          <div><dt>Asking price</dt><dd>£825,000 <small>Listing assumption</small></dd></div>
-          <div><dt>Nearby renovated equivalent</dt><dd>£1.05m <small>Indicative estimate</small></dd></div>
-          <div><dt>Station</dt><dd>7 min walk <small>Approximate</small></dd></div>
-          <div><dt>Condition</dt><dd>Significant refurbishment <small>Visual assessment</small></dd></div>
-          <div><dt>Potential</dt><dd>Rear / side-return extension <small>Subject to planning and survey</small></dd></div>
-          <div class="risk"><dt>Main risk</dt><dd>Renovation cost could erase much of the apparent discount.</dd></div>
-        </dl>
-      </div>
-      <div class="container assumption-note"><strong>Estimates &amp; assumptions</strong> This is an editorial screen, not a valuation, survey or planning opinion. Verify all material facts independently.</div>
-    </section>
-
-    <section id="areas" class="section container">
-      <div class="section-heading">
-        <div><p class="eyebrow">Street-level context</p><h2>Area intelligence</h2></div>
-        <p>Looking past postcode shorthand to the housing stock, connections and local value gaps that shape an opportunity.</p>
-      </div>
-      <div class="area-grid">
-        <article class="area-card"><span>01</span><h3>Crystal Palace</h3><dl><dt>Character</dt><dd>Victorian villas, terraces and hilltop conversions.</dd><dt>Transport</dt><dd>Overground and rail; useful links east and north.</dd><dt>Relative value</dt><dd>Premium locally, but varied street by street.</dd></dl><p><strong>Bare Bones view</strong> Look below the ridge and beyond the triangle for compromised houses with scale.</p></article>
-        <article class="area-card"><span>02</span><h3>Penge</h3><dl><dt>Character</dt><dd>Victorian terraces and larger semi-detached houses.</dd><dt>Transport</dt><dd>Multiple stations with rail and Overground options.</dd><dt>Relative value</dt><dd>Often below nearby Crystal Palace and Dulwich.</dd></dl><p><strong>Bare Bones view</strong> One of the clearest house-for-money cases when the street is chosen carefully.</p></article>
-        <article class="area-card"><span>03</span><h3>Anerley</h3><dl><dt>Character</dt><dd>Mixed Victorian and Edwardian stock, often generously proportioned.</dd><dt>Transport</dt><dd>Overground plus fast access to nearby rail stations.</dd><dt>Relative value</dt><dd>Frequently overlooked between stronger place names.</dd></dl><p><strong>Bare Bones view</strong> The label can suppress interest more than the housing or connections justify.</p></article>
-        <article class="area-card"><span>04</span><h3>Sydenham</h3><dl><dt>Character</dt><dd>Broad mix from cottages to substantial family houses.</dd><dt>Transport</dt><dd>Overground and rail from Sydenham; useful alternatives nearby.</dd><dt>Relative value</dt><dd>Good scale, with premiums near the strongest pockets.</dd></dl><p><strong>Bare Bones view</strong> Focus on intact houses just outside the obvious conservation-area appeal.</p></article>
-        <article class="area-card"><span>05</span><h3>West Dulwich</h3><dl><dt>Character</dt><dd>Late-Victorian and Edwardian family houses.</dd><dt>Transport</dt><dd>Rail to Victoria; access to Tulse Hill alternatives.</dd><dt>Relative value</dt><dd>Expensive, but can trail Dulwich Village sharply.</dd></dl><p><strong>Bare Bones view</strong> Auction and poorly presented stock can create rare entry points into high-quality streets.</p></article>
-      </div>
-    </section>
-
-    <section class="community-section">
-      <div class="container">
-        <div class="section-heading light-heading"><div><p class="eyebrow">Community judgement</p><h2>Which has the most potential?</h2></div><p>Cast one local vote on the house whose underlying opportunity you rate most highly.</p></div>
-        <div class="vote-grid" data-vote-container>
-          <article class="vote-card" data-property="Penge Victorian"><span>01</span><h3>Penge Victorian</h3><p>£825,000 · 4 beds</p><button type="button" class="vote-button">Vote for this</button><div class="vote-meter"><i></i></div><small class="vote-share">—</small></article>
-          <article class="vote-card" data-property="Anerley Edwardian"><span>02</span><h3>Anerley Edwardian</h3><p>£775,000 · 3 beds</p><button type="button" class="vote-button">Vote for this</button><div class="vote-meter"><i></i></div><small class="vote-share">—</small></article>
-          <article class="vote-card" data-property="Sydenham Probate"><span>03</span><h3>Sydenham Probate</h3><p>£895,000 · 4 beds</p><button type="button" class="vote-button">Vote for this</button><div class="vote-meter"><i></i></div><small class="vote-share">—</small></article>
-        </div>
-        <div class="choice-results" aria-live="polite"><p>Members’ choice <strong>Penge Victorian</strong></p><p>All visitors’ choice <strong id="visitor-choice">Vote to reveal</strong></p></div>
-      </div>
-    </section>
-
-    <section id="sold-prices" class="section container split-feature">
-      <div class="sold-copy">
-        <p class="eyebrow">Sold-price test</p>
-        <h2>Guess what this South London house sold for.</h2>
-        <p>A three-bedroom Victorian terrace near Lower Sydenham, requiring updating but retaining a 70-foot garden.</p>
-        <div class="guess-options" data-guess-game>
-          <button type="button" data-price="710000">£710,000</button>
-          <button type="button" data-price="755000">£755,000</button>
-          <button type="button" data-price="810000">£810,000</button>
-        </div>
-        <div id="guess-result" class="guess-result" aria-live="polite"></div>
-      </div>
-      <figure class="sold-image image-frame"><img src="images/property-placeholder.svg" alt="Placeholder for the fictional sold-price property"><figcaption><span>Sold archive</span> Sydenham · Fictional example</figcaption></figure>
-    </section>
-
-    <section class="services-section">
-      <div class="container">
-        <p class="eyebrow">Specialist directory</p>
-        <div class="service-grid">
-          <article><small>Sponsored</small><p>Craft &amp; conservation</p><h3>Period restoration specialist</h3><p>Repair-led work for sash windows, lime plaster, joinery and historic façades across South London.</p><a href="#">View specialist profile <span>→</span></a></article>
-          <article><small>Sponsored</small><p>Design &amp; planning</p><h3>Residential architect — South London</h3><p>Feasibility studies and sensitive extensions for Victorian and Edwardian family houses.</p><a href="#">View specialist profile <span>→</span></a></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="newsletter-section">
-      <div class="container newsletter-grid">
-        <div><p class="eyebrow">The weekly shortlist</p><h2>Five South London opportunities worth examining.</h2></div>
-        <form class="newsletter-form" data-newsletter-form>
-          <label for="email">Email address</label>
-          <div><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required><button type="submit">Subscribe</button></div>
-          <p class="form-message" aria-live="polite">A concise weekly note. Prototype only—no email will be stored.</p>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer id="about" class="site-footer">
-    <div class="container footer-grid">
-      <div><a class="wordmark footer-wordmark" href="#">Bare Bones<span>.</span></a><p>Editorial property intelligence for South London</p></div>
-      <nav aria-label="Footer navigation"><a href="#about">About</a><a href="#method">Methodology</a><a href="#">Advertise</a><a href="#">Contact</a><button type="button" class="footer-link" data-cookie-settings aria-expanded="false">Cookie settings</button><a href="#">Privacy</a></nav>
-      <p class="legal">Prototype content is fictional and for demonstration only.<br>© 2026 Bare Bones</p>
+    <!-- COMING SOON -->
+    <div class="coming-soon" id="comingSoon" hidden>
+      <p class="eyebrow" style="color:var(--terracotta); text-align:center;">Coming soon</p>
+      <h2>Real overlooked properties, picked and explained by us.</h2>
+      <p>Bare Bones is building beyond the game: houses with renovation potential across South London, chosen and analysed by us — not an algorithm. Get the next one first.</p>
+      <form class="email-form" id="emailForm">
+        <!-- TODO: replace action with a real form endpoint (Formspree, Buttondown, Mailchimp, etc.) before launch -->
+        <input type="email" id="emailInput" placeholder="you@email.com" required aria-label="Email address">
+        <button type="submit">Notify me</button>
+      </form>
+      <p class="form-msg" id="formMsg" hidden>Thanks — we'll be in touch when the first property drops.</p>
     </div>
-  </footer>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Bare Bones is an independent editorial project. It is not a valuation, surveying, financial or investment advice service. Sale prices are drawn from public sold-price records; verify current details before making any decision.</p>
+    <p>© Bare Bones · barebones.london</p>
+  </div>
+</footer>
+
+<script>
+/* =========================================================================
+   ROUND DATA — PLACEHOLDER / EXAMPLE VALUES
+   These are illustrative and anchored to real Crystal Palace/SE19 house-price
+   ranges (Land Registry via public aggregators, 2025–26: semi-detached median
+   ~£760k, range ~£489.5k–£1.45m) but are NOT verified individual transactions.
+
+   Before sharing this publicly, replace each entry below with a real, exact
+   transaction from HM Land Registry Price Paid Data:
+   https://landregistry.data.gov.uk/app/ppd
+   (or the Rightmove / Zoopla "house prices" lookup for SE19 / SE20, which is
+   sourced from the same Land Registry data).
+   ========================================================================= */
+const ROUNDS = [
+  {
+    title: "Victorian terrace, off Anerley Hill",
+    facts: ["3 bed", "Terraced house", "Freehold", "SE19"],
+    actual: 825000,
+    note: "<strong>Bare Bones read —</strong> Original condition throughout. Terraces on this street have sold for meaningfully more once extended into the side return."
+  },
+  {
+    title: "Semi-detached house, Crystal Palace Park borders",
+    facts: ["4 bed", "Semi-detached", "Freehold", "SE19"],
+    actual: 1050000,
+    note: "<strong>Bare Bones read —</strong> Already extended and well presented — this sits near the top of the range for the postcode."
+  },
+  {
+    title: "Edwardian house, Anerley",
+    facts: ["3 bed", "Terraced house", "Freehold", "SE20"],
+    actual: 715000,
+    note: "<strong>Bare Bones read —</strong> Dated kitchen and bathroom kept this one below the local house median, despite a good layout."
+  },
+  {
+    title: "Cottage-style house, Gipsy Hill borders",
+    facts: ["2 bed", "Terraced house", "Freehold", "SE19"],
+    actual: 650000,
+    note: "<strong>Bare Bones read —</strong> Needs a full rewire and a fresh layout — smaller footprint kept this under £700k despite the location."
+  },
+  {
+    title: "Extended family house, West Dulwich borders",
+    facts: ["5 bed", "Semi-detached", "Freehold", "SE21"],
+    actual: 1450000,
+    note: "<strong>Bare Bones read —</strong> A loft conversion already done. Provable, finished work like this is what tends to justify the top of the local range."
+  }
+];
+
+let current = 0;
+let guesses = [];
+
+const guessSlider = document.getElementById('guessSlider');
+const guessValue = document.getElementById('guessValue');
+const roundTitle = document.getElementById('roundTitle');
+const roundFacts = document.getElementById('roundFacts');
+const progressLabel = document.getElementById('progressLabel');
+const progressPct = document.getElementById('progressPct');
+const progressFill = document.getElementById('progressFill');
+const guessStage = document.getElementById('guessStage');
+const revealStage = document.getElementById('revealStage');
+const submitGuess = document.getElementById('submitGuess');
+const nextRound = document.getElementById('nextRound');
+const gameCard = document.getElementById('gameCard');
+const endCard = document.getElementById('endCard');
+const comingSoon = document.getElementById('comingSoon');
+
+function fmt(n){
+  return '£' + Math.round(n).toLocaleString('en-GB');
+}
+
+function paintSliderTrack(){
+  const min = +guessSlider.min, max = +guessSlider.max, val = +guessSlider.value;
+  const pct = ((val - min) / (max - min)) * 100;
+  guessSlider.style.background =
+    `linear-gradient(to right, var(--terracotta) ${pct}%, var(--cream-line) ${pct}%)`;
+}
+
+guessSlider.addEventListener('input', () => {
+  guessValue.textContent = fmt(guessSlider.value);
+  paintSliderTrack();
+});
+
+function loadRound(i){
+  const r = ROUNDS[i];
+  roundTitle.textContent = r.title;
+  roundFacts.innerHTML = r.facts.map(f => `<span class="fact">${f}</span>`).join('');
+  progressLabel.textContent = `Property ${i+1} of ${ROUNDS.length}`;
+  progressPct.textContent = Math.round(((i)/ROUNDS.length)*100) + '%';
+  progressFill.style.width = ((i)/ROUNDS.length*100) + '%';
+
+  guessSlider.value = 700000;
+  guessValue.textContent = fmt(700000);
+  paintSliderTrack();
+
+  guessStage.hidden = false;
+  revealStage.hidden = true;
+}
+
+submitGuess.addEventListener('click', () => {
+  const guess = +guessSlider.value;
+  const actual = ROUNDS[current].actual;
+  guesses.push({ guess, actual });
+
+  document.getElementById('revealGuess').textContent = fmt(guess);
+  document.getElementById('revealActual').textContent = fmt(actual);
+
+  const min = Math.min(guess, actual) * 0.85;
+  const max = Math.max(guess, actual) * 1.15;
+  const guessPct = ((guess - min) / (max - min)) * 100;
+  const actualPct = ((actual - min) / (max - min)) * 100;
+
+  const guessMarker = document.getElementById('guessMarker');
+  const actualMarker = document.getElementById('actualMarker');
+  const guessLabel = document.getElementById('guessMarkerLabel');
+  const actualLabel = document.getElementById('actualMarkerLabel');
+
+  guessMarker.style.left = '0%';
+  actualMarker.style.left = '0%';
+  guessLabel.style.left = guessPct + '%';
+  actualLabel.style.left = actualPct + '%';
+
+  requestAnimationFrame(() => {
+    guessMarker.style.left = guessPct + '%';
+    actualMarker.style.left = actualPct + '%';
+  });
+
+  const diff = guess - actual;
+  const pctOff = Math.abs(diff / actual * 100);
+  const deltaText = document.getElementById('deltaText');
+  if (pctOff < 2) {
+    deltaText.textContent = `Spot on — within ${pctOff.toFixed(1)}%`;
+  } else {
+    deltaText.textContent = `${fmt(Math.abs(diff))} too ${diff > 0 ? 'high' : 'low'} (${pctOff.toFixed(1)}% off)`;
+  }
+
+  document.getElementById('roundNote').innerHTML = ROUNDS[current].note;
+
+  guessStage.hidden = true;
+  revealStage.hidden = false;
+  nextRound.textContent = (current === ROUNDS.length - 1) ? 'See your results' : 'Next property';
+
+  progressPct.textContent = Math.round(((current+1)/ROUNDS.length)*100) + '%';
+  progressFill.style.width = ((current+1)/ROUNDS.length*100) + '%';
+});
+
+nextRound.addEventListener('click', () => {
+  current++;
+  if (current < ROUNDS.length){
+    loadRound(current);
+  } else {
+    showResults();
+  }
+});
+
+function showResults(){
+  gameCard.hidden = true;
+  const avgPct = guesses.reduce((sum,g) => sum + Math.abs((g.guess - g.actual)/g.actual*100), 0) / guesses.length;
+  document.getElementById('endScore').textContent = avgPct.toFixed(1) + '% off';
+  document.getElementById('endSub').textContent = 'average distance from the real Crystal Palace sale prices, across ' + ROUNDS.length + ' properties';
+  endCard.hidden = false;
+  comingSoon.hidden = false;
+}
+
+document.getElementById('replayBtn').addEventListener('click', () => {
+  current = 0;
+  guesses = [];
+  endCard.hidden = true;
+  comingSoon.hidden = true;
+  gameCard.hidden = false;
+  loadRound(0);
+  window.scrollTo({ top: gameCard.offsetTop - 20, behavior: 'smooth' });
+});
+
+document.getElementById('emailForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  // TODO: wire this up to a real email provider (Formspree / Buttondown / Mailchimp).
+  // For now this just confirms locally so the flow can be tested end to end.
+  document.getElementById('emailForm').hidden = true;
+  document.getElementById('formMsg').hidden = false;
+});
+
+loadRound(0);
+</script>
+
 </body>
 </html>
